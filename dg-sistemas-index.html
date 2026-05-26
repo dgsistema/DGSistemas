@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DG Sistemas | Sites e Sistemas Profissionais</title>
+
+  <meta name="theme-color" content="#050505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DG Sistemas">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root{
+      --gold:#d6a843;
+      --gold-2:#f3d37a;
+      --gold-soft:rgba(214,168,67,.13);
+      --gold-line:rgba(214,168,67,.30);
+      --black:#050505;
+      --panel:#0c0c0f;
+      --panel-2:#141418;
+      --white:#ffffff;
+      --muted:#d6d6d6;
+      --text-soft:#a7a7a7;
+      --shadow:0 18px 42px rgba(0,0,0,.45);
+      --transition:.25s ease;
+      --max:1280px;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;width:100%;max-width:100%;overflow-x:hidden;}
+
+    body{
+      width:100%;max-width:100%;font-family:Arial, Helvetica, sans-serif;color:var(--white);overflow-x:hidden;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(214,168,67,.18), transparent 32%),
+        radial-gradient(circle at 88% 22%, rgba(255,255,255,.08), transparent 26%),
+        linear-gradient(135deg, rgba(0,0,0,.93), rgba(12,12,15,.98)),
+        #050505;
+    }
+
+    a{text-decoration:none;color:inherit;transition:var(--transition);}
+    button{font-family:inherit;transition:var(--transition);cursor:pointer;border:none;background:none;}
+    ul{list-style:none;}
+    img{max-width:100%;display:block;}
+
+    .wrap{width:min(100% - 32px, var(--max));margin:0 auto;}
+    .dg-logo{object-fit:contain;background:transparent !important;border:0 !important;border-radius:0 !important;filter:drop-shadow(0 0 12px rgba(214,168,67,.28));}
+
+    .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);opacity:0;visibility:hidden;transition:var(--transition);z-index:998;}
+    .sidebar-overlay.show{opacity:1;visibility:visible;}
+    .sidebar{position:fixed;top:0;left:0;width:320px;max-width:88%;height:100vh;background:linear-gradient(180deg,#0f0f13 0%,#050505 100%);border-right:1px solid var(--gold-line);box-shadow:var(--shadow);padding:22px 18px 28px;overflow-y:auto;transform:translateX(-105%);transition:var(--transition);z-index:999;}
+    .sidebar.open{transform:translateX(0);}
+    .sidebar-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08);}
+    .sidebar-brand{display:flex;gap:12px;align-items:center;}
+    .sidebar-brand img{width:58px;height:58px;}
+    .sidebar-brand-text strong{display:block;font-size:17px;color:var(--gold-2);line-height:1.25;}
+    .sidebar-brand-text span{display:block;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.35;}
+    .sidebar-close{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:24px;}
+    .sidebar-close:hover{background:var(--gold);color:#050505;}
+    .sidebar-block{margin-bottom:22px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px;}
+    .sidebar-title{font-size:13px;font-weight:900;color:var(--gold-2);margin-bottom:12px;letter-spacing:.4px;}
+    .side-menu{display:flex;flex-direction:column;gap:8px;}
+    .side-menu a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:var(--muted);border:1px solid transparent;}
+    .side-menu a:hover{background:var(--gold-soft);color:var(--gold-2);border-color:var(--gold-line);transform:translateX(3px);}
+    .side-icon{width:20px;text-align:center;color:var(--gold-2);flex-shrink:0;}
+
+    .topbar{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(5,5,5,.84);border-bottom:1px solid rgba(214,168,67,.18);overflow:visible;}
+    .topbar-inner{min-height:84px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap;position:relative;}
+    .topbar-left{display:flex;align-items:center;gap:14px;flex:0 0 auto;order:1;}
+    .menu-toggle{width:46px;height:46px;border-radius:14px;border:1px solid var(--gold-line);background:var(--gold-soft);color:var(--gold-2);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .menu-toggle:hover{transform:translateY(-2px);background:var(--gold);color:#050505;}
+    .topbar-logo{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;order:2;}
+    .topbar-logo img{width:64px;height:64px;flex-shrink:0;}
+    .logo-text strong{display:block;font-size:18px;color:#fff;line-height:1.2;letter-spacing:.3px;}
+    .logo-text span{display:block;margin-top:4px;color:var(--gold-2);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .top-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto;position:relative;z-index:180;order:3;margin-left:auto;}
+    .top-nav{width:100%;display:flex;justify-content:center;order:4;overflow:visible;position:relative;z-index:150;scrollbar-width:none;}
+    .top-nav::-webkit-scrollbar{display:none;}
+    .top-nav ul{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;justify-content:center;width:auto;min-width:0;padding-bottom:2px;overflow:visible;margin:0 auto;}
+    .top-nav li{position:relative;flex:0 0 auto;}
+    .top-nav a,.dropdown-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;color:var(--muted);font-weight:700;border:1px solid transparent;background:transparent;white-space:nowrap;}
+    .top-nav a:hover,.dropdown-toggle:hover,.top-nav li:hover>a{color:var(--gold-2);background:var(--gold-soft);border-color:var(--gold-line);}
+    .dropdown-menu{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);min-width:240px;background:linear-gradient(180deg,#121216 0%,#070707 100%);border:1px solid var(--gold-line);border-radius:16px;box-shadow:var(--shadow);padding:8px;display:none;z-index:9999;}
+    .dropdown.open .dropdown-menu,.dropdown:hover .dropdown-menu{display:block;}
+    .dropdown-menu a{display:flex;width:100%;padding:12px 14px;border-radius:12px;color:var(--muted);border:1px solid transparent;}
+
+    .btn-primary,.btn-secondary,.btn-login-chip{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:14px;transition:var(--transition);font-weight:900;cursor:pointer;border:1px solid transparent;}
+    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#090909;padding:14px 18px;box-shadow:0 12px 24px rgba(214,168,67,.22);}
+    .btn-primary:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 14px 28px rgba(214,168,67,.32);}
+    .btn-secondary{padding:14px 18px;border:1px solid var(--gold-line);color:#fff;background:rgba(255,255,255,.06);}
+    .btn-secondary:hover{transform:translateY(-2px);background:var(--gold);color:#050505;}
+    .btn-login-chip{padding:10px 16px;border:1px solid var(--gold-line);background:rgba(214,168,67,.09);color:var(--gold-2);white-space:nowrap;}
+    .login-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:inherit;overflow:hidden;flex-shrink:0;}
+
+    .hero{padding:34px 0 20px;position:relative;z-index:1;}
+    .hero-card{background:linear-gradient(135deg,rgba(22,22,26,.94),rgba(5,5,5,.95));border:1px solid var(--gold-line);border-radius:30px;box-shadow:var(--shadow);overflow:hidden;position:relative;}
+    .hero-card:before{content:"";position:absolute;inset:-1px;background:radial-gradient(circle at 78% 18%,rgba(214,168,67,.25),transparent 34%);pointer-events:none;}
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center;padding:34px;position:relative;}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(214,168,67,.12);border:1px solid var(--gold-line);color:var(--gold-2);font-size:13px;font-weight:900;margin-bottom:16px;}
+    .hero h1{font-size:48px;line-height:1.08;margin-bottom:12px;color:#fff;letter-spacing:-1px;}
+    .hero h1 span{color:var(--gold-2);}
+    .hero p{color:var(--muted);font-size:18px;line-height:1.7;max-width:700px;}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;}
+    .hero-art{min-height:360px;border-radius:24px;border:1px solid rgba(214,168,67,.20);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(214,168,67,.10),rgba(255,255,255,.04));overflow:hidden;position:relative;}
+    .hero-art:after{content:"DG";position:absolute;font-size:160px;font-weight:1000;color:rgba(214,168,67,.05);right:16px;bottom:0;line-height:1;}
+    .hero-art img{width:72%;height:auto;object-fit:contain;filter:drop-shadow(0 22px 36px rgba(0,0,0,.65));position:relative;z-index:2;}
+
+    .cards-pilares,.portfolio-grid,.plans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:28px 0 10px;}
+    .pillar,.portfolio-card,.plan-card{background:linear-gradient(180deg,rgba(20,20,24,.96),rgba(8,8,9,.98));border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px 18px;box-shadow:var(--shadow);transition:var(--transition);}
+    .pillar{display:flex;gap:14px;align-items:flex-start;}
+    .pillar:hover,.portfolio-card:hover,.plan-card:hover{border-color:var(--gold-line);transform:translateY(-3px);}
+    .pillar-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--gold-soft);color:var(--gold-2);font-size:22px;flex-shrink:0;}
+    .pillar-text h3,.portfolio-card h3,.plan-card h3{font-size:18px;margin-bottom:8px;color:#fff;}
+    .pillar-text p,.portfolio-card p,.plan-card p{font-size:14px;line-height:1.6;color:var(--muted);}
+
+    .content-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;margin:28px 0;}
+    .panel{background:linear-gradient(180deg,rgba(20,20,24,.96),rgba(8,8,9,.98));border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:var(--shadow);padding:22px;}
+    .panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+    .panel-head-title{display:flex;align-items:center;gap:12px;}
+    .panel-head-icon{width:46px;height:46px;border-radius:14px;background:var(--gold-soft);color:var(--gold-2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .panel-head h2{font-size:28px;color:#fff;}
+    .panel-head a{color:var(--gold-2);font-weight:900;}
+
+    .portfolio-grid{grid-template-columns:repeat(3,1fr);margin:0;}
+    .portfolio-card{min-height:165px;display:flex;flex-direction:column;gap:10px;}
+    .portfolio-tag{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:var(--gold-soft);border:1px solid var(--gold-line);color:var(--gold-2);font-size:11px;font-weight:900;}
+    .service-list{display:grid;gap:12px;}
+    .service-item{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);}
+    .service-item i{color:var(--gold-2);font-size:18px;margin-top:2px;}
+    .service-item strong{display:block;color:#fff;margin-bottom:4px;}
+    .service-item span{display:block;color:var(--muted);font-size:13px;line-height:1.45;}
+
+    .plans-section{margin:28px 0;}
+    .plans-grid{grid-template-columns:repeat(3,1fr);}
+    .plan-card{position:relative;overflow:hidden;}
+    .plan-card.featured{border-color:var(--gold-line);background:linear-gradient(180deg,rgba(36,29,16,.96),rgba(8,8,9,.98));}
+    .price{font-size:30px;font-weight:1000;color:var(--gold-2);margin:12px 0;}
+    .plan-card ul{display:grid;gap:9px;margin:15px 0 18px;color:var(--muted);font-size:14px;}
+    .plan-card li{display:flex;gap:8px;align-items:flex-start;}
+    .plan-card li i{color:var(--gold-2);margin-top:2px;}
+
+    .lead-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+    .lead-form input,.lead-form textarea,.lead-form select{width:100%;border:1px solid rgba(214,168,67,.22);background:rgba(255,255,255,.055);color:#fff;border-radius:12px;padding:13px 14px;outline:none;font-size:14px;}
+    .lead-form textarea{grid-column:1/-1;min-height:108px;resize:vertical;}
+    .lead-form button{grid-column:1/-1;}
+    .form-msg{grid-column:1/-1;color:var(--gold-2);font-size:13px;font-weight:900;display:none;}
+
+    .cta-banner{margin:10px 0 34px;}
+    .cta-banner-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(214,168,67,.18),rgba(255,255,255,.05));border:1px solid var(--gold-line);border-radius:24px;padding:26px;box-shadow:var(--shadow);}
+    .cta-banner-inner h3{font-size:30px;color:#fff;margin-bottom:8px;}
+    .cta-banner-inner p{color:var(--muted);line-height:1.6;}
+
+    footer{background:linear-gradient(180deg,rgba(10,10,12,.96),rgba(0,0,0,1));border-top:1px solid rgba(214,168,67,.14);padding:40px 0 18px;}
+    .footer-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:20px;}
+    .footer-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:22px;}
+    .footer-card h4{color:var(--gold-2);margin-bottom:14px;font-size:18px;}
+    .footer-brand{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+    .footer-brand img{width:72px;height:72px;}
+    .footer-brand-text h3{font-size:20px;margin-bottom:6px;color:#fff;}
+    .footer-brand-text p{color:var(--muted);line-height:1.5;font-size:14px;}
+    .footer-card a{display:block;color:var(--muted);margin-bottom:10px;}
+    .footer-card a:hover{color:var(--gold-2);}
+    .footer-contact-line{display:flex !important;align-items:center;gap:10px;margin-bottom:12px !important;}
+    .footer-social{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+    .footer-social a{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--gold-2);margin-bottom:0;}
+    .footer-social a:hover{background:var(--gold);color:#050505;}
+    .copyright{margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);text-align:center;color:var(--text-soft);font-size:14px;}
+
+    @media (max-width:1180px){.hero-grid,.content-grid,.footer-grid,.cards-pilares{grid-template-columns:1fr 1fr}.top-nav{justify-content:flex-start;overflow-x:auto}.top-nav ul{justify-content:flex-start;width:max-content;min-width:max-content;margin:0;gap:6px}.portfolio-grid,.plans-grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:900px){.hero-grid,.content-grid,.footer-grid,.cards-pilares,.portfolio-grid,.plans-grid{grid-template-columns:1fr}.hero h1{font-size:36px}.panel-head h2{font-size:24px}.top-nav{overflow-x:auto}.top-nav ul{flex-wrap:nowrap;justify-content:flex-start}.top-nav a,.dropdown-toggle{padding:9px 12px;font-size:13px}}
+    @media (max-width:600px){.wrap{width:min(100% - 20px,var(--max))}.topbar-inner{min-height:auto;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"menu logo login" "nav nav nav";gap:8px;align-items:center;padding:10px 0}.topbar-left{grid-area:menu;order:initial}.menu-toggle{width:42px;height:42px;border-radius:12px}.topbar-logo{grid-area:logo;gap:7px;order:initial}.topbar-logo img{width:48px;height:48px}.logo-text strong{font-size:13px;line-height:1.12}.logo-text span{font-size:10px;margin-top:2px}.top-actions{grid-area:login;margin-left:0;justify-content:flex-end;order:initial}.btn-login-chip{min-height:42px;padding:7px 9px;border-radius:12px}.btn-login-chip>span:last-child{display:none}.top-nav{grid-area:nav;order:initial;justify-content:flex-start;overflow-x:auto;width:100%;margin-top:6px}.top-nav ul{width:max-content;min-width:max-content;justify-content:flex-start;gap:6px;padding-right:10px}.top-nav a,.dropdown-toggle{padding:8px 10px;font-size:12px;border-radius:10px}.dropdown:hover .dropdown-menu{display:none}.dropdown.open .dropdown-menu{display:block;position:fixed;left:10px!important;right:10px!important;transform:none!important;width:auto;min-width:0;max-width:calc(100vw - 20px)}.hero{padding-top:24px}.hero-grid{padding:20px}.hero h1{font-size:30px}.hero p{font-size:16px}.btn-primary,.btn-secondary{width:100%}.hero-art{min-height:260px}.hero-art img{width:82%}.lead-form{grid-template-columns:1fr}.cta-banner-inner h3{font-size:24px}}
+  </style>
+</head>
+
+<body data-pagina="inicio">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <img class="dg-logo" src="https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png" alt="DG Sistemas">
+        <div class="sidebar-brand-text"><strong>DG Sistemas</strong><span>Sites e sistemas profissionais</span></div>
+      </div>
+      <button class="sidebar-close" id="sidebarClose" type="button">×</button>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-title">NAVEGAÇÃO</div>
+      <div class="side-menu">
+        <a href="#inicio"><span class="side-icon"><i class="fa-solid fa-house"></i></span>Início</a>
+        <a href="#servicos"><span class="side-icon"><i class="fa-solid fa-code"></i></span>Serviços</a>
+        <a href="#portfolio"><span class="side-icon"><i class="fa-solid fa-display"></i></span>Portfólio</a>
+        <a href="#planos"><span class="side-icon"><i class="fa-solid fa-tags"></i></span>Planos</a>
+        <a href="#contato"><span class="side-icon"><i class="fa-solid fa-phone"></i></span>Contato</a>
+      </div>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-title">SOLUÇÕES</div>
+      <div class="side-menu">
+        <a href="#servicos"><span class="side-icon"><i class="fa-solid fa-globe"></i></span>Sites Institucionais</a>
+        <a href="#servicos"><span class="side-icon"><i class="fa-solid fa-trophy"></i></span>Sistemas para Ligas</a>
+        <a href="#servicos"><span class="side-icon"><i class="fa-solid fa-shield-halved"></i></span>Painéis Administrativos</a>
+        <a href="#servicos"><span class="side-icon"><i class="fa-solid fa-mobile-screen"></i></span>Sites Responsivos</a>
+      </div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="topbar-left"><button class="menu-toggle" id="menuToggle" type="button">☰</button></div>
+      <a href="#inicio" class="topbar-logo">
+        <img class="dg-logo" src="https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png" alt="DG Sistemas">
+        <div class="logo-text"><strong>DG Sistemas</strong><span>Sites modernos para vender mais</span></div>
+      </a>
+      <div class="top-actions">
+        <a href="https://wa.me/5562984284785?text=Ol%C3%A1%2C%20quero%20um%20site%20profissional%20com%20a%20DG%20Sistemas." class="btn-login-chip" target="_blank"><span class="login-avatar"><i class="fa-brands fa-whatsapp"></i></span><span>Orçamento</span></a>
+      </div>
+
+      <nav class="top-nav">
+        <ul>
+          <li><a href="#inicio">Início</a></li>
+          <li class="dropdown" id="sistemasDropdown"><button class="dropdown-toggle" id="sistemasToggle" type="button">Sistemas <i class="fa-solid fa-chevron-down"></i></button>
+            <div class="dropdown-menu">
+              <a href="#servicos">Sites Profissionais</a>
+              <a href="#servicos">Sistema de Campeonato</a>
+              <a href="#servicos">Painel ADM</a>
+              <a href="#servicos">Automação Firebase</a>
+            </div>
+          </li>
+          <li><a href="#portfolio">Portfólio</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <div class="eyebrow"><i class="fa-solid fa-crown"></i> Presença digital premium</div>
+              <h1>Seu negócio com um site <span>moderno, rápido e profissional</span></h1>
+              <p>A DG Sistemas cria sites, sistemas e painéis administrativos com visual forte, estrutura responsiva e tecnologia pronta para apresentar sua marca e vender seus serviços.</p>
+              <div class="hero-actions">
+                <a href="https://wa.me/5562984284785?text=Ol%C3%A1%2C%20quero%20fazer%20um%20or%C3%A7amento%20de%20site." class="btn-primary" target="_blank"><i class="fa-brands fa-whatsapp"></i> Pedir Orçamento</a>
+                <a href="#portfolio" class="btn-secondary"><i class="fa-solid fa-eye"></i> Ver Modelos</a>
+              </div>
+            </div>
+            <div class="hero-art"><img class="dg-logo" src="https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png" alt="Logo DG Sistemas"></div>
+          </div>
+        </div>
+
+        <div class="cards-pilares">
+          <div class="pillar"><div class="pillar-icon"><i class="fa-solid fa-bolt"></i></div><div class="pillar-text"><h3>Site rápido</h3><p>Estrutura leve, responsiva e preparada para celular.</p></div></div>
+          <div class="pillar"><div class="pillar-icon"><i class="fa-solid fa-gem"></i></div><div class="pillar-text"><h3>Visual premium</h3><p>Cores, logo e identidade visual alinhadas com sua marca.</p></div></div>
+          <div class="pillar"><div class="pillar-icon"><i class="fa-solid fa-database"></i></div><div class="pillar-text"><h3>Firebase</h3><p>Integração com banco de dados, login e painéis administrativos.</p></div></div>
+          <div class="pillar"><div class="pillar-icon"><i class="fa-solid fa-headset"></i></div><div class="pillar-text"><h3>Suporte</h3><p>Ajustes, melhorias e acompanhamento durante o projeto.</p></div></div>
+        </div>
+
+        <div class="content-grid" id="servicos">
+          <section class="panel">
+            <div class="panel-head"><div class="panel-head-title"><div class="panel-head-icon"><i class="fa-solid fa-code"></i></div><h2>O que fazemos</h2></div><a href="#contato">Solicitar <i class="fa-solid fa-arrow-right"></i></a></div>
+            <div class="portfolio-grid">
+              <article class="portfolio-card"><span class="portfolio-tag">Site</span><h3>Site Institucional</h3><p>Perfeito para empresas, prestadores de serviço, lojas e profissionais que querem presença online.</p></article>
+              <article class="portfolio-card"><span class="portfolio-tag">Sistema</span><h3>Sistema para Campeonatos</h3><p>Tabelas, jogos, súmulas, artilharia, cartões, login, painel ADM e páginas públicas.</p></article>
+              <article class="portfolio-card"><span class="portfolio-tag">Painel</span><h3>Painel Administrativo</h3><p>Cadastro, edição, listagem e controle de dados com visual organizado e responsivo.</p></article>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panel-head"><div class="panel-head-title"><div class="panel-head-icon"><i class="fa-solid fa-star"></i></div><h2>Diferenciais</h2></div></div>
+            <div class="service-list">
+              <div class="service-item"><i class="fa-solid fa-mobile-screen"></i><div><strong>100% responsivo</strong><span>Funciona bem no computador e no celular.</span></div></div>
+              <div class="service-item"><i class="fa-solid fa-palette"></i><div><strong>Visual personalizado</strong><span>Feito com as cores, logo e estilo da sua marca.</span></div></div>
+              <div class="service-item"><i class="fa-solid fa-lock"></i><div><strong>Área administrativa</strong><span>Você controla informações do site quando precisar.</span></div></div>
+              <div class="service-item"><i class="fa-brands fa-github"></i><div><strong>GitHub integrado</strong><span>Imagens e arquivos carregados direto do seu repositório.</span></div></div>
+            </div>
+          </aside>
+        </div>
+
+        <section class="panel" id="portfolio">
+          <div class="panel-head"><div class="panel-head-title"><div class="panel-head-icon"><i class="fa-solid fa-display"></i></div><h2>Modelos de projetos</h2></div></div>
+          <div class="portfolio-grid">
+            <article class="portfolio-card"><span class="portfolio-tag">Modelo 01</span><h3>Site de empresa</h3><p>Apresentação profissional com serviços, contato, WhatsApp e seções de autoridade.</p></article>
+            <article class="portfolio-card"><span class="portfolio-tag">Modelo 02</span><h3>Site esportivo</h3><p>Sistema completo para ligas, campeonatos, clubes, atletas e súmulas.</p></article>
+            <article class="portfolio-card"><span class="portfolio-tag">Modelo 03</span><h3>Painel ADM</h3><p>Gerenciamento de cadastros, listas, fotos, status, documentos e dados do sistema.</p></article>
+          </div>
+        </section>
+
+        <section class="plans-section" id="planos">
+          <div class="panel-head"><div class="panel-head-title"><div class="panel-head-icon"><i class="fa-solid fa-tags"></i></div><h2>Planos</h2></div></div>
+          <div class="plans-grid">
+            <article class="plan-card"><h3>Inicial</h3><p>Para começar online com uma página bonita.</p><div class="price">Sob consulta</div><ul><li><i class="fa-solid fa-check"></i> Página única</li><li><i class="fa-solid fa-check"></i> WhatsApp</li><li><i class="fa-solid fa-check"></i> Responsivo</li></ul><a class="btn-secondary" href="#contato">Quero esse</a></article>
+            <article class="plan-card featured"><h3>Profissional</h3><p>Para empresas que querem vender melhor.</p><div class="price">Sob consulta</div><ul><li><i class="fa-solid fa-check"></i> Várias seções</li><li><i class="fa-solid fa-check"></i> Formulário</li><li><i class="fa-solid fa-check"></i> Firebase/Database</li></ul><a class="btn-primary" href="#contato">Mais escolhido</a></article>
+            <article class="plan-card"><h3>Sistema</h3><p>Para projetos com painel, login e banco de dados.</p><div class="price">Sob consulta</div><ul><li><i class="fa-solid fa-check"></i> Login</li><li><i class="fa-solid fa-check"></i> Painel ADM</li><li><i class="fa-solid fa-check"></i> Banco de dados</li></ul><a class="btn-secondary" href="#contato">Quero sistema</a></article>
+          </div>
+        </section>
+
+        <section class="cta-banner" id="contato">
+          <div class="cta-banner-inner">
+            <div><h3>Vamos criar seu site?</h3><p>Preencha o formulário ou chame no WhatsApp para solicitar um orçamento.</p></div>
+            <a href="https://wa.me/5562984284785?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20DG%20Sistemas." class="btn-primary" target="_blank"><i class="fa-brands fa-whatsapp"></i> Chamar no WhatsApp</a>
+            <form class="lead-form" id="leadForm">
+              <input type="text" name="nome" placeholder="Seu nome" required>
+              <input type="tel" name="telefone" placeholder="WhatsApp" required>
+              <select name="tipo" required><option value="">Tipo de projeto</option><option>Site profissional</option><option>Sistema com painel ADM</option><option>Site de campeonato/liga</option><option>Outro projeto</option></select>
+              <input type="text" name="cidade" placeholder="Cidade/Estado">
+              <textarea name="mensagem" placeholder="Conte rapidamente o que você precisa"></textarea>
+              <div class="form-msg" id="formMsg">Mensagem enviada com sucesso!</div>
+              <button class="btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Enviar solicitação</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-card"><div class="footer-brand"><img class="dg-logo" src="https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png" alt="DG Sistemas"><div class="footer-brand-text"><h3>DG Sistemas</h3><p>Sites e sistemas profissionais com visual premium.</p></div></div><div class="footer-social"><a href="https://www.instagram.com/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="https://github.com/dgsistema/DGSistemas" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a><a href="https://wa.me/5562984284785" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></div></div>
+        <div class="footer-card"><h4>Acesso Rápido</h4><a href="#inicio">Início</a><a href="#servicos">Serviços</a><a href="#portfolio">Portfólio</a><a href="#planos">Planos</a><a href="#contato">Contato</a></div>
+        <div class="footer-card"><h4>Contato</h4><a href="https://wa.me/5562984284785" target="_blank" class="footer-contact-line"><i class="fa-brands fa-whatsapp"></i><span>(62) 98428-4785</span></a><a href="mailto:contato@dgsistemas.com" class="footer-contact-line"><i class="fa-solid fa-envelope"></i><span>contato@dgsistemas.com</span></a><div class="footer-contact-line"><i class="fa-solid fa-location-dot"></i><span>Goiânia - GO</span></div></div>
+        <div class="footer-card"><h4>Tecnologias</h4><a>HTML, CSS e JavaScript</a><a>Firebase</a><a>GitHub</a><a>Sites Responsivos</a></div>
+      </div>
+      <div class="copyright">© 2026 DG Sistemas. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+    const DG_LOGO = "https://raw.githubusercontent.com/dgsistema/DGSistemas/main/DG.png";
+    const FIREBASE_DATABASE_URL = "https://dgsistemas-192cf-default-rtdb.firebaseio.com";
+
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebarClose = document.getElementById("sidebarClose");
+    const sistemasDropdown = document.getElementById("sistemasDropdown");
+    const sistemasToggle = document.getElementById("sistemasToggle");
+
+    function isMobile(){ return window.innerWidth <= 700; }
+    function openSidebar(){ if(!sidebar || !sidebarOverlay) return; sidebar.classList.add("open"); sidebarOverlay.classList.add("show"); document.body.style.overflow = "hidden"; }
+    function closeSidebar(){ if(!sidebar || !sidebarOverlay) return; sidebar.classList.remove("open"); sidebarOverlay.classList.remove("show"); document.body.style.overflow = ""; }
+    function closeAllDropdowns(){ if(sistemasDropdown) sistemasDropdown.classList.remove("open"); }
+
+    if(menuToggle) menuToggle.addEventListener("click", e=>{e.stopPropagation();openSidebar();});
+    if(sidebarClose) sidebarClose.addEventListener("click", closeSidebar);
+    if(sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
+    if(sistemasToggle){
+      sistemasToggle.addEventListener("click", e=>{
+        e.preventDefault();e.stopPropagation();
+        const abrir = !sistemasDropdown.classList.contains("open");
+        closeAllDropdowns();
+        if(abrir) sistemasDropdown.classList.add("open");
+      });
+    }
+    document.addEventListener("click", e=>{
+      if(e.target.closest("a")) closeSidebar();
+      const insideSidebar = sidebar && sidebar.contains(e.target);
+      const insideMenu = sistemasDropdown && sistemasDropdown.contains(e.target);
+      const clickedToggle = menuToggle && menuToggle.contains(e.target);
+      if(sidebar && sidebar.classList.contains("open") && !insideSidebar && !clickedToggle) closeSidebar();
+      if(!insideMenu) closeAllDropdowns();
+    });
+    document.addEventListener("keydown", e=>{ if(e.key === "Escape"){ closeSidebar(); closeAllDropdowns(); } });
+
+    const leadForm = document.getElementById("leadForm");
+    const formMsg = document.getElementById("formMsg");
+    if(leadForm){
+      leadForm.addEventListener("submit", async function(event){
+        event.preventDefault();
+        const dados = Object.fromEntries(new FormData(leadForm).entries());
+        dados.criadoEm = new Date().toISOString();
+        dados.origem = "site-dg-sistemas";
+        const btn = leadForm.querySelector("button");
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+        btn.disabled = true;
+        try{
+          await fetch(`${FIREBASE_DATABASE_URL}/leads.json`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(dados)
+          });
+          if(formMsg){ formMsg.style.display = "block"; formMsg.textContent = "Mensagem enviada com sucesso!"; }
+          leadForm.reset();
+        }catch(error){
+          if(formMsg){ formMsg.style.display = "block"; formMsg.textContent = "Não foi possível enviar agora. Chame pelo WhatsApp."; }
+          console.error("Erro ao enviar lead:", error);
+        }finally{
+          btn.innerHTML = textoOriginal;
+          btn.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
